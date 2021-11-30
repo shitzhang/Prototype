@@ -12,6 +12,7 @@
 #include "Items/ShooterUsableActor.h"
 #include "Items/ShooterWeaponPickup.h"
 #include "Sound/SoundCue.h"
+#include "ShooterPlayerState.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter(const class FObjectInitializer& ObjectInitializer)
@@ -329,6 +330,40 @@ void AShooterCharacter::Punch()
 		bPendingPunch = true;
 		SimulatePunch();
 	}
+}
+
+
+void AShooterCharacter::ServerPerformPunchDamage_Implementation(AActor* HitActor)
+{
+	if (HitActor && HitActor != this && IsAlive())
+	{
+		ACharacter* OtherPawn = Cast<ACharacter>(HitActor);
+		if (OtherPawn)
+		{
+			AShooterPlayerState* MyPS = Cast<AShooterPlayerState>(GetPlayerState());
+			AShooterPlayerState* OtherPS = Cast<AShooterPlayerState>(OtherPawn->GetPlayerState());
+
+			if (MyPS && OtherPS)
+			{
+				if (MyPS->GetTeamNumber() == OtherPS->GetTeamNumber())
+				{
+					return;
+				}
+
+				FPointDamageEvent DmgEvent;
+				DmgEvent.DamageTypeClass = PunchDamageType;
+				DmgEvent.Damage = PunchDamage;
+
+				HitActor->TakeDamage(DmgEvent.Damage, DmgEvent, GetController(), this);
+			}
+		}
+	}
+}
+
+
+bool AShooterCharacter::ServerPerformPunchDamage_Validate(AActor* HitActor)
+{
+	return true;
 }
 
 

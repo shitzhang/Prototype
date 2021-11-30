@@ -179,11 +179,22 @@ protected:
 	float DropWeaponMaxDistance;
 
 	bool bWantsToFire;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Attacking")
+	TSubclassOf<UDamageType> PunchDamageType;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Attacking")
+	float PunchDamage;
+
 public:
 	virtual FVector GetPawnViewLocation() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	void Punch();
+
+	/* Deal damage to the Actor that was hit by the punch animation */
+	UFUNCTION(Server, Reliable,WithValidation, BlueprintCallable, Category = "Player")
+	void ServerPerformPunchDamage(AActor* HitActor);
 
 	UFUNCTION(Reliable, Server, WithValidation)
 	void ServerPunch();

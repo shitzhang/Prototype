@@ -583,6 +583,20 @@ void AShooterBaseCharacter::LeftFootDown() const
 	SpawnFootprint(LeftFootArrowComp, LeftFootprintDecal);
 }
 
+void AShooterBaseCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	AShooterCharacter* OtherChar = Cast<AShooterCharacter>(OtherActor);
+	if(OtherChar && OtherChar->GetPlayerState())
+	{
+		if(!OtherChar->GetPlayerState()->IsABot() && OtherChar->bPendingPunch)
+		{
+			OtherChar->ServerPerformPunchDamage(this);
+		}
+	}
+}
+
 
 void AShooterBaseCharacter::SpawnFootprint(UArrowComponent* FootArrow, TSubclassOf<AActor> FootprintDecal) const
 {

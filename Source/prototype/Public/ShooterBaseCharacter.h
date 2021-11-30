@@ -199,4 +199,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "PickupWeapon")
 	float PR_PickUpWeapon;
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 };

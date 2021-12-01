@@ -57,7 +57,10 @@ Drop：G
 Pick：E  
 切换近战：X  
 自由视角：左Alt  
-  
+
+## 资源链接
+- 游戏在PC端和安卓端均能运行，链接如下。  
+
 The zip file of exe(Windows-64bit) and apk, videos are in:  
 https://pan.baidu.com/s/1Jkt9xXEqK-L29y-_BwKe3w  
 password: 8uvo  

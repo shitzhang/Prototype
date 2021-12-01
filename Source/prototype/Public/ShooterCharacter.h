@@ -119,7 +119,10 @@ public:
 	/************************************************************************/
 
 	// input
+	UFUNCTION(BlueprintCallable, Category = "Player")
 	void BeginTarget();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
 	void EndTarget();
 
 
@@ -128,6 +131,7 @@ public:
 	/************************************************************************/
 
 	/* Use the usable actor currently in focus, if any */
+	UFUNCTION(BlueprintCallable, Category = "Player")
 	virtual void Use();
 
 	UFUNCTION(Server, Reliable, WithValidation)

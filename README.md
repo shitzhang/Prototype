@@ -49,9 +49,6 @@
 1. 为了降低游戏难度，玩家出生点后面的墙上挂满各类武器。  
 2. 左右两边各有4个Buff生成器，Buff被捡后10秒重新生成Buff。  
 
-## 待改进
-1. 游戏在PC端体验良好，安卓端还在调试中。稍后更新。  
-
 ## 基本操作  
 移动：WASD 跳：Space 蹲：左Ctrl 冲刺：左Shift 开火：鼠标左键 瞄准：鼠标右键  
 切换武器：鼠标滚轮 键盘1，2  
@@ -60,7 +57,7 @@ Pick：E
 切换近战：X  
 自由视角：左Alt  
   
-The zip file of exe(Windows-64bit) and video are in:  
+The zip file of exe(Windows-64bit) and apk, videos are in:  
 https://pan.baidu.com/s/1Jkt9xXEqK-L29y-_BwKe3w  
 password: 8uvo  
 

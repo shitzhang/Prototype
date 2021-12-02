@@ -7,7 +7,6 @@
 #include "ShooterExplosiveBarrel.generated.h"
 
 
-class UShooterHealthComponent;
 class UStaticMeshComponent;
 class URadialForceComponent;
 class UParticleSystem;
@@ -25,20 +24,19 @@ public:
 protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UShooterHealthComponent* HealthComp;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* MeshComp;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	URadialForceComponent* RadialForceComp;
 
-	UFUNCTION()
-	void OnHealthChanged(UShooterHealthComponent* OwningHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType,
-		class AController* InstigatedBy, AActor* DamageCauser);
-
 	UPROPERTY(ReplicatedUsing = OnRep_Exploded)
 	bool bExploded;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	float ExplosionDamage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	TSubclassOf<UDamageType> DamageType;
 
 	UFUNCTION()
 	void OnRep_Exploded();
@@ -54,5 +52,13 @@ protected:
 	/* The material to replace the original on the mesh once exploded (a blackened version) */
 	UPROPERTY(EditDefaultsOnly, Category = "FX")
 	UMaterialInterface* ExplodedMaterial;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Health", Replicated)
+	float Health;
+
+	/* Take damage & handle death */
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator,
+	class AActor* DamageCauser) override;
 
 };

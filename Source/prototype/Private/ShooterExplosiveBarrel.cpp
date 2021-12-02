@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Sound/SoundCue.h"
 
 
 // Sets default values
@@ -73,6 +74,11 @@ float AShooterExplosiveBarrel::TakeDamage(float Damage, FDamageEvent const& Dama
 			UGameplayStatics::ApplyRadialDamage(GetWorld(), ExplosionDamage, GetActorLocation(), RadialForceComp->Radius,
 				DamageType,
 				IgnoreActors, this, EventInstigator, true);
+
+			if (ExplosionSound)
+			{
+				UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
+			}
 		}
 	}
 

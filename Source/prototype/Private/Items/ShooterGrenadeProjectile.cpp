@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "AI/ShooterZombieCharacter.h"
 #include "ShooterWeapon.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 AShooterGrenadeProjectile::AShooterGrenadeProjectile()
@@ -117,6 +118,11 @@ void AShooterGrenadeProjectile::Explode_Implementation()
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), ExplosionDamage, GetActorLocation(), ExplosionRadius,
 		DamageType,
 		IgnoreActors, this, this->GetInstigatorController(), true);
+
+	if (ExplosionSound)
+	{
+		UGameplayStatics::SpawnSoundAtLocation(GetWorld(),ExplosionSound,GetActorLocation());
+	}
 
 	Destroy();
 }

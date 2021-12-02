@@ -171,7 +171,7 @@ void AShooterWeapon::OnEquip(bool bPlayAnimation)
 		PlayWeaponSound(EquipSound);
 	}
 
-	//UpdateTimeBetweenShots();
+	UpdateTimeBetweenShots();
 
 	ReceiveOnEquip();
 }

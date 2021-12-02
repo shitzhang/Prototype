@@ -49,6 +49,8 @@ AShooterCharacter::AShooterCharacter(const class FObjectInitializer& ObjectIniti
 	SprintingSpeedModifier = 2.5f;
 
 	bPendingPunch = false;
+
+	ShootSpeedFactor = 1.0f;
 }
 
 

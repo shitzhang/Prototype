@@ -10,6 +10,7 @@
 class UStaticMeshComponent;
 class URadialForceComponent;
 class UParticleSystem;
+class USoundCue;
 
 
 UCLASS()
@@ -52,6 +53,9 @@ protected:
 	/* The material to replace the original on the mesh once exploded (a blackened version) */
 	UPROPERTY(EditDefaultsOnly, Category = "FX")
 	UMaterialInterface* ExplodedMaterial;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+	USoundCue* ExplosionSound;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Health", Replicated)

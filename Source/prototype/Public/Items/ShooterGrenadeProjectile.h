@@ -10,6 +10,7 @@
 class USphereComponent;
 class UProjectileMovementComponent;
 class URadialForceComponent;
+class USoundCue;
 
 
 UCLASS()
@@ -52,6 +53,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	UParticleSystem* ExplosionEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+	USoundCue* ExplosionSound;
 
 	UPROPERTY(EditDefaultsOnly)
 	float ExplosionDamage;

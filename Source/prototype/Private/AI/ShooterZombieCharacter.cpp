@@ -66,11 +66,11 @@ void AShooterZombieCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	/* This is the earliest moment we can bind our delegates to the component */
-	if (PawnSensingComp)
+	/*if (PawnSensingComp)
 	{
 		PawnSensingComp->OnSeePawn.AddDynamic(this, &AShooterZombieCharacter::OnSeePlayer);
 		PawnSensingComp->OnHearNoise.AddDynamic(this, &AShooterZombieCharacter::OnHearNoise);
-	}
+	}*/
 
 	BroadcastUpdateAudioLoop(bSensedTarget);
 
@@ -89,20 +89,36 @@ void AShooterZombieCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	/* Check if the last time we sensed a player is beyond the time out value to prevent bot from endlessly following a player. */
-	if (bSensedTarget && (GetWorld()->TimeSeconds - LastSeenTime) > SenseTimeOut 
-		&& (GetWorld()->TimeSeconds - LastHeardTime) > SenseTimeOut)
-	{
-		AShooterZombieAIController* AIController = Cast<AShooterZombieAIController>(GetController());
-		if (AIController)
-		{
-			bSensedTarget = false;
-			/* Reset */
-			AIController->SetTargetEnemy(nullptr);
+	//if (bSensedTarget && (GetWorld()->TimeSeconds - LastSeenTime) > SenseTimeOut 
+	//	&& (GetWorld()->TimeSeconds - LastHeardTime) > SenseTimeOut)
+	//{
+	//	AShooterZombieAIController* AIController = Cast<AShooterZombieAIController>(GetController());
+	//	if (AIController)
+	//	{
+	//		bSensedTarget = false;
+	//		/* Reset */
+	//		AIController->SetTargetEnemy(nullptr);
 
-			/* Stop playing the hunting sound */
-			BroadcastUpdateAudioLoop(false);
-		}
+	//		/* Stop playing the hunting sound */
+	//		BroadcastUpdateAudioLoop(false);
+	//	}
+	//}
+}
+
+
+void AShooterZombieCharacter::OnPerceptTarget(APawn* Pawn)
+{
+	if (!IsAlive())
+	{
+		return;
 	}
+
+	if (!bSensedTarget)
+	{
+		BroadcastUpdateAudioLoop(true);
+	}
+
+	bSensedTarget = true;
 }
 
 

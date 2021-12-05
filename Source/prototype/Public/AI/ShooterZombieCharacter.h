@@ -40,6 +40,9 @@ protected:
 
 	virtual bool IsSprinting() const override;
 
+	UFUNCTION(BlueprintCallable)
+	void OnPerceptTarget(APawn* Pawn);
+
 	/* Triggered by pawn sensing component when a pawn is spotted */
 	/* When using functions as delegates they need to be marked with UFUNCTION(). We assign this function to FSeePawnDelegate */
 	UFUNCTION()

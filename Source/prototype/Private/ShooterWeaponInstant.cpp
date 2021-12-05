@@ -9,7 +9,8 @@
 #include "Net/UnrealNetwork.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "Perception/AISense_Damage.h"
+#include "ShooterPlayerState.h"
 
 
 AShooterWeaponInstant::AShooterWeaponInstant()
@@ -90,6 +91,22 @@ void AShooterWeaponInstant::DealDamage(const FHitResult& Impact, const FVector& 
 		}
 	}
 
+	// AI perception Damage Event
+	APawn* DamagedPawn = Cast<APawn>(Impact.GetActor());
+
+	if (DamagedPawn && MyPawn)
+	{
+		AShooterPlayerState* DamagedPS = Cast<AShooterPlayerState>(DamagedPawn->GetPlayerState());
+		AShooterPlayerState* MyPS = Cast<AShooterPlayerState>(MyPawn->GetPlayerState());
+
+		if (DamagedPS && MyPS && DamagedPS->GetTeamNumber() != MyPS->GetTeamNumber())
+		{
+			UAISense_Damage::ReportDamageEvent(GetWorld(), Impact.GetActor(), MyPawn, ActualHitDamage,
+			                                   MyPawn->GetActorLocation(), Impact.Location);
+		}
+	}
+
+
 	FPointDamageEvent PointDmg;
 	PointDmg.DamageTypeClass = DamageType;
 	PointDmg.HitInfo = Impact;
@@ -128,7 +145,8 @@ void AShooterWeaponInstant::ProcessInstantHit(const FHitResult& Impact, const FV
 }
 
 
-void AShooterWeaponInstant::ProcessInstantHitConfirmed(const FHitResult& Impact, const FVector& Origin, const FVector& ShootDir)
+void AShooterWeaponInstant::ProcessInstantHitConfirmed(const FHitResult& Impact, const FVector& Origin,
+                                                       const FVector& ShootDir)
 {
 	// Handle damage
 	if (ShouldDealDamage(Impact.GetActor()))
@@ -198,8 +216,8 @@ void AShooterWeaponInstant::ServerNotifyHit_Implementation(const FHitResult Impa
 					ProcessInstantHitConfirmed(Impact, Origin, ShootDir);
 				}
 			}
-			// Assume it told the truth about static things because we don't move and the hit
-			// usually doesn't have significant gameplay implications
+				// Assume it told the truth about static things because we don't move and the hit
+				// usually doesn't have significant gameplay implications
 			else if (Impact.GetActor()->IsRootComponentStatic() || Impact.GetActor()->IsRootComponentStationary())
 			{
 				ProcessInstantHitConfirmed(Impact, Origin, ShootDir);
@@ -260,11 +278,13 @@ void AShooterWeaponInstant::SpawnImpactEffects(const FHitResult& Impact)
 		// TODO: Possible re-trace to get hit component that is lost during replication.
 
 		/* This function prepares an actor to spawn, but requires another call to finish the actual spawn progress. This allows manipulation of properties before entering into the level */
-		AShooterImpactEffect* EffectActor = GetWorld()->SpawnActorDeferred<AShooterImpactEffect>(ImpactTemplate, FTransform(Impact.ImpactPoint.Rotation(), Impact.ImpactPoint));
+		AShooterImpactEffect* EffectActor = GetWorld()->SpawnActorDeferred<AShooterImpactEffect>(
+			ImpactTemplate, FTransform(Impact.ImpactPoint.Rotation(), Impact.ImpactPoint));
 		if (EffectActor)
 		{
 			EffectActor->SurfaceHit = Impact;
-			UGameplayStatics::FinishSpawningActor(EffectActor, FTransform(Impact.ImpactNormal.Rotation(), Impact.ImpactPoint));
+			UGameplayStatics::FinishSpawningActor(EffectActor,
+			                                      FTransform(Impact.ImpactNormal.Rotation(), Impact.ImpactPoint));
 		}
 	}
 }
@@ -320,7 +340,7 @@ void AShooterWeaponInstant::OnRep_HitLocation()
 }
 
 
-void AShooterWeaponInstant::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+void AShooterWeaponInstant::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
